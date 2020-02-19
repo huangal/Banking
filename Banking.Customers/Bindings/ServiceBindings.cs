@@ -1,9 +1,11 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Banking.Customers.Domain.Interfaces;
+using Banking.Customers.Models;
 using Banking.Customers.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Banking.Customers.Bindings
 {
@@ -11,24 +13,15 @@ namespace Banking.Customers.Bindings
     {
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
-
-            //var serviceAccessLevel = configuration.GetSection("ServiceAccessLevel")
-            //                    .Get<ServiceAccessLevel>();
-
-           // services.AddSingleton<IServiceAccessLevel>(cw => configuration.GetSection("ServiceAccessLevel").Get<ServiceAccessLevel>());
-            //services.AddSingleton<IAuthorizationHandler, ServiceAccessHandler>();
-           // services.AddScoped<ICustomerRepositoryService, CustomerRepositoryService>();
-
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddScoped<ICustomerService, CustomerService>();
             return services;
         }
-
 
         public static void AddAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<AutoMapper.IConfigurationProvider>(AutoMapperConfig.RegisterMappings());
-            services.AddSingleton(AutoMapperConfig.RegisterMappings());
         }
     }
 }

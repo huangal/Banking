@@ -12,7 +12,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Banking.Customers.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// Customers Services provide demographic information
+    /// </summary>
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomersController : Controller
     {
         private ICustomerService _dataService;
@@ -22,7 +27,10 @@ namespace Banking.Customers.Controllers
             _dataService = dataRepositoryService;
         }
 
-
+        /// <summary>
+        /// Get List of Customers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
