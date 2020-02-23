@@ -9,14 +9,8 @@ namespace Banking.Customers.Bindings
     {
         public static void CreateSeedData(this IApplicationBuilder app)
         {
-          
             var dataContext = app.ApplicationServices.GetService<CustomersContext>();
-            dataContext.CreateSeedData();
-
-            //using (var context = app.ApplicationServices.GetService<ApiContext>())
-            //{
-            //    context.CreateSeedData();
-            //}
+            dataContext.CreateSeedData(2500);
         }
 
     }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Banking.Customers.Attributes;
 using Banking.Customers.Domain.Interfaces;
@@ -8,17 +6,15 @@ using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace Banking.Customers.Controllers
+namespace Banking.Customers.Controllers.v2
 {
     /// <summary>
     /// Customers Services provide demographic information
     /// </summary>
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class CustomersController : Controller
+    public class CustomersController : ControllerBase
     {
         private ICustomerService _dataService;
 
@@ -104,22 +100,10 @@ namespace Banking.Customers.Controllers
         }
 
 
-
-        //    List<Customer> customers = _context.Customers.Take(3).ToList();
-        //    return customers;
-        //}
-
-
-
-        //[Authorize(Policy = "ServiceAccess")]
-
-
-
-        //[Authorize(Policy = "ServiceAccess")]
         [HttpGet("Count")]
         public IActionResult GetCount()
         {
-            var count = _dataService.GetCustomersCountAsync();
+            var count = _dataService.GetCustomersCount();
             return Ok(count);
         }
 

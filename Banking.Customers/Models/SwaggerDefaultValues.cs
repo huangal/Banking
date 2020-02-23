@@ -25,10 +25,8 @@ namespace Banking.Customers.Models
 
             operation.Deprecated |= apiDescription.IsDeprecated();
 
-            if (operation.Parameters == null)
-            {
-                return;
-            }
+            if (operation.Parameters == null) return;
+            
 
             foreach (var parameter in operation.Parameters)
             {

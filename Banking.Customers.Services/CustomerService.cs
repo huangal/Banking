@@ -17,8 +17,8 @@ namespace Banking.Customers.Services
     public class CustomerService: ICustomerService
     {
         private readonly CustomersContext _context;
-        private IMapper _mapper;
-        private IConfigurationProvider _mapperConfiguration;
+        private readonly IMapper _mapper;
+        private readonly IConfigurationProvider _mapperConfiguration;
 
         public CustomerService(CustomersContext context, IMapper mapper, IConfigurationProvider mapperConfig)
         {
@@ -46,7 +46,7 @@ namespace Banking.Customers.Services
             return await _context.Customers.Take(count).ProjectTo<CustomerModel>(_mapperConfiguration).ToListAsync();
         }
 
-        public async Task<int> GetCustomersCountAsync()
+        public int GetCustomersCount()
         {
             return _context.Customers.Count();
 
@@ -93,10 +93,5 @@ namespace Banking.Customers.Services
             return true;
         }
 
-
-        //public async Task<string> GenerateKeyAsync(int lenght)
-        //{
-        //    return PasswordGenerator.GeneratePassword(lenght);
-        //}
     }
 }

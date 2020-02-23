@@ -11,7 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.ReDoc" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="4.1.1" />
@@ -21,6 +21,9 @@
     <Folder Include="Bindings\" />
     <Folder Include="Attributes\" />
     <Folder Include="Models\" />
+    <Folder Include="Controllers\v2\" />
+    <Folder Include="Controllers\v0\" />
+    <Folder Include="Controllers\v1\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Banking.Customers.Data\Banking.Customers.Data.csproj">

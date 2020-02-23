@@ -7,12 +7,12 @@ namespace Banking.Customers.Data.Extensions
 {
     public static class DataExtensions
     {
-        public static void CreateSeedData(this CustomersContext context)
+        public static void CreateSeedData(this CustomersContext context, int records =1000)
         {
 
             if (context.Customers.Any()) return;
 
-            var customers = LoadCustomers(1000);//LoadtCustomers(100);
+            var customers = LoadCustomers(records);
 
             context.AddRange(customers);
             context.SaveChanges();

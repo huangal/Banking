@@ -53,14 +53,14 @@ namespace Banking.Customers
                 app.UseDeveloperExceptionPage();
             }
 
-            
+            app.CreateSeedData();
             app.UseSwaggerSettings(provider);
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthorization();         
 
             app.UseEndpoints(endpoints =>
             {

@@ -4,12 +4,23 @@
         <name>Banking.Customers</name>
     </assembly>
     <members>
-        <member name="T:Banking.Customers.Controllers.CustomersController">
+        <member name="T:Banking.Customers.Controllers.v1.CustomersController">
             <summary>
             Customers Services provide demographic information
             </summary>
         </member>
-        <member name="M:Banking.Customers.Controllers.CustomersController.Get">
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.Get">
+            <summary>
+            Get List of Customers
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Banking.Customers.Controllers.v2.CustomersController">
+            <summary>
+            Customers Services provide demographic information
+            </summary>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v2.CustomersController.Get">
             <summary>
             Get List of Customers
             </summary>

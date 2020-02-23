@@ -10,10 +10,10 @@ namespace Banking.Customers.Domain.Interfaces
         Task<CustomerModel> GetCustomersAsync(int id);
         Task<IEnumerable<CustomerModel>> GetCustomersAsync();
         Task<IEnumerable<CustomerModel>> GetCustomerListAsync(int count);
-        Task<int> GetCustomersCountAsync();
+        int GetCustomersCount();
         Task<CustomerModel> CreateCustomerAsync(CustomerModel customerModel);
         Task<CustomerModel> UpdateCustomerAsync(CustomerModel customerModel);
         Task<bool> DeleteCustomerAsync(int id);
-       // Task<string> GenerateKeyAsync(int lenght);
+      
     }
 }

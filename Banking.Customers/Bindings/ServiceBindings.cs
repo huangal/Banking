@@ -14,7 +14,7 @@ namespace Banking.Customers.Bindings
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddSingleton<ICustomerService, CustomerService>();
             return services;
         }
 

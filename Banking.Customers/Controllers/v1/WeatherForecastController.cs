@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Banking.Customers.Controllers
+namespace Banking.Customers.Controllers.v1
 {
     [ApiController]
     [ApiVersion("1.0")]
