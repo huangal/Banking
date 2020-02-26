@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Banking.Customers.Controllers.v0
 {
     [ApiController]
-    [ApiVersion("0.9", Deprecated = true)]
+    [ApiVersion("1.9", Deprecated = true)]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
