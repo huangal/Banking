@@ -6,12 +6,99 @@
     <members>
         <member name="T:Banking.Customers.Controllers.v1.CustomersController">
             <summary>
-            Customers Services provide demographic information
+            Customers Services provide customer information for banking
             </summary>
         </member>
         <member name="M:Banking.Customers.Controllers.v1.CustomersController.Get">
             <summary>
             Get List of Customers
+            </summary>
+            <returns>List of Cutomer objects</returns>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.Get(System.Int32)">
+             <summary>
+             Get a single customer
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 GET api/Customers/25
+                 
+             </remarks>
+             <param name="id"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.Post(Banking.Customers.Domain.Models.CustomerModel)">
+             <summary>
+             Create a new customer
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST api/Customers
+                 {
+                   "name": "Peter",
+                   "last": "Doe",
+                   "age": 45,
+                   "email": "user@example.com",
+                   "product": "VISA"
+                  }
+            
+             </remarks>
+             <param name="customer"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.Put(Banking.Customers.Domain.Models.CustomerModel,System.Int32)">
+             <summary>
+             Update customer
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 POST api/Customers/25
+                 {
+                   "id": 25,
+                   "name": "Peter",
+                   "last": "Doe",
+                   "age": 45,
+                   "email": "Peter.Dow@example.com",
+                   "product": "VISA"
+                  }
+            
+             </remarks>
+             <param name="customer"></param>
+             <param name="id"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.Delete(System.Int32)">
+             <summary>
+             Delete Customer
+             </summary>
+             <remarks>
+             Sample request:
+            
+                 DELETE api/Customers/25
+                 
+             </remarks>
+             <param name="id"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.GetList(System.Int32)">
+             <summary>
+             Get a requested number of customer
+             </summary>
+             /// <remarks>
+             Sample request:
+            
+                 GET api/Customers/List/10
+                 
+             </remarks>
+             <param name="numberofrecords"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Banking.Customers.Controllers.v1.CustomersController.GetCount">
+            <summary>
+            Get total number of customers
             </summary>
             <returns></returns>
         </member>

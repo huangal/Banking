@@ -47,7 +47,11 @@ namespace Banking.Customers.Bindings
             {
                 c.SpecUrl = "/swagger/v1/swagger.json";
                 c.DocumentTitle = "Banking.Customers";
-                c.ConfigObject = new Swashbuckle.AspNetCore.ReDoc.ConfigObject();
+                c.ConfigObject = new Swashbuckle.AspNetCore.ReDoc.ConfigObject()
+                {
+                    
+
+                };
             });
         }
 
