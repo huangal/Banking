@@ -1,18 +1,18 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Banking.Customers.Attributes;
+using Banking.Customers.Controllers.Attributes;
 using Banking.Customers.Domain.Interfaces;
 using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Banking.Customers.Controllers.v2
+namespace Banking.Customers.Controllers.v1
 {
     /// <summary>
-    /// Customers Services provide demographic information
+    /// Customers Services provide customer information for banking
     /// </summary>
     [ApiController]
-    [ApiVersion("2.0")]
+    [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomersController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace Banking.Customers.Controllers.v2
         /// <summary>
         /// Get List of Customers
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of Cutomer objects</returns>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -36,6 +36,17 @@ namespace Banking.Customers.Controllers.v2
 
         }
 
+        /// <summary>
+        /// Get a single customer
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET api/Customers/25
+        ///     
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -44,6 +55,24 @@ namespace Banking.Customers.Controllers.v2
         }
 
 
+        /// <summary>
+        /// Create a new customer
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/Customers
+        ///     {
+        ///       "name": "Peter",
+        ///       "last": "Doe",
+        ///       "age": 45,
+        ///       "email": "user@example.com",
+        ///       "product": "VISA"
+        ///      }
+        ///
+        /// </remarks>
+        /// <param name="customer"></param>
+        /// <returns></returns>
         [HttpPost]
         [ModelValidation]
         public async Task<IActionResult> Post([FromBody] CustomerModel customer)
@@ -57,6 +86,26 @@ namespace Banking.Customers.Controllers.v2
         }
 
 
+        /// <summary>
+        /// Update customer
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST api/Customers/25
+        ///     {
+        ///       "id": 25,
+        ///       "name": "Peter",
+        ///       "last": "Doe",
+        ///       "age": 45,
+        ///       "email": "Peter.Dow@example.com",
+        ///       "product": "VISA"
+        ///      }
+        ///
+        /// </remarks>
+        /// <param name="customer"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         [ModelValidation]
         public async Task<IActionResult> Put([FromBody] CustomerModel customer, [FromRoute] int id)
@@ -73,6 +122,17 @@ namespace Banking.Customers.Controllers.v2
             return Ok(result.Result);
         }
 
+        /// <summary>
+        /// Delete Customer
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE api/Customers/25
+        ///     
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         [ModelValidation]
         public async Task<IActionResult> Delete([FromRoute] int id)
@@ -90,6 +150,17 @@ namespace Banking.Customers.Controllers.v2
         }
 
 
+        /// <summary>
+        /// Get a requested number of customer
+        /// </summary>
+        /// /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET api/Customers/List/10
+        ///     
+        /// </remarks>
+        /// <param name="numberofrecords"></param>
+        /// <returns></returns>
         [HttpGet("List/{numberofrecords}")]
         public async Task<IActionResult> GetList(int numberofrecords)
         {
@@ -100,6 +171,10 @@ namespace Banking.Customers.Controllers.v2
         }
 
 
+        /// <summary>
+        /// Get total number of customers
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Count")]
         public IActionResult GetCount()
         {
@@ -111,6 +186,4 @@ namespace Banking.Customers.Controllers.v2
 
 
     }
-
-
 }

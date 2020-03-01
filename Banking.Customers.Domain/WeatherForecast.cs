@@ -1,6 +1,5 @@
-using System;
-
-namespace Banking.Customers
+﻿using System;
+namespace Banking.Customers.Domain
 {
     public class WeatherForecast
     {

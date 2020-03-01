@@ -1,10 +1,11 @@
 ﻿using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Banking.Customers.Models;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace Banking.Customers.Bindings
 {
@@ -19,7 +20,7 @@ namespace Banking.Customers.Bindings
                     options.OperationFilter<SwaggerDefaultValues>();
 
                     // integrate xml comments
-                    options.IncludeXmlComments(XmlCommentsFilePath);
+                    XmlCommentsFiles.ForEach(file => options.IncludeXmlComments(file));
                 });
 
         }
@@ -45,24 +46,21 @@ namespace Banking.Customers.Bindings
 
             app.UseReDoc(c =>
             {
-                c.SpecUrl = "/swagger/v1/swagger.json";
+                c.SpecUrl = $"/swagger/{provider.ApiVersionDescriptions.Last().GroupName}/swagger.json";
                 c.DocumentTitle = "Banking.Customers";
                 c.ConfigObject = new Swashbuckle.AspNetCore.ReDoc.ConfigObject()
                 {
-                    
-
                 };
             });
         }
 
 
-        private static string XmlCommentsFilePath
+        private static List<string> XmlCommentsFiles
         {
             get
-            {
+            {             
                 var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                var fileName = typeof(Startup).GetTypeInfo().Assembly.GetName().Name + ".xml";
-                return Path.Combine(basePath, fileName);
+                return Directory.GetFiles(basePath, "*.xml", SearchOption.TopDirectoryOnly).ToList();
             }
         }
     }

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Banking.Customers.Domain;
 
-namespace Banking.Customers.Controllers.v1
+namespace Banking.Customers.Controllers.v2
 {
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
@@ -23,6 +24,10 @@ namespace Banking.Customers.Controllers.v1
             _logger = logger;
         }
 
+        /// <summary>
+        /// Get the weather forecast
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

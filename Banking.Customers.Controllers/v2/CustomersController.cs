@@ -1,18 +1,18 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Banking.Customers.Attributes;
+using Banking.Customers.Controllers.Attributes;
 using Banking.Customers.Domain.Interfaces;
 using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Banking.Customers.Controllers.v1
+namespace Banking.Customers.Controllers.v2
 {
     /// <summary>
     /// Customers Services provide customer information for banking
     /// </summary>
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomersController : ControllerBase
     {
