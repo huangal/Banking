@@ -17,14 +17,17 @@ namespace Banking.Customers.Models
     {
         private readonly IApiVersionDescriptionProvider _provider;
         private readonly IConfiguration _configuration;
+        private readonly ApiInfo _apiInfo;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.
         /// </summary>
         /// <param name="provider">The <see cref="IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
-        public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider, IConfiguration configuration) {
-             this._provider = provider;
-            this._configuration = configuration;
+        public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider, IConfiguration configuration, IOptionsMonitor<ApiInfo> optionsAccessor)
+        {
+             _provider = provider;
+            _configuration = configuration;
+            _apiInfo = optionsAccessor.CurrentValue;
         }
 
         /// <inheritdoc />
@@ -41,25 +44,25 @@ namespace Banking.Customers.Models
         private  OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
         {
 
-            var apiInfo = _configuration.GetSection("ApiInfo").Get<ApiInfo>();
+           //var apiInfo = _configuration.GetSection("ApiInfo").Get<ApiInfo>();
 
 
             var openApiInfo = new OpenApiInfo
             {
-                Title = apiInfo.Title,
+                Title = _apiInfo.Title,
                 Version = description.ApiVersion.ToString(),
-                Description = apiInfo.Description,
-                TermsOfService = new Uri(apiInfo.TermsOfService),
+                Description = _apiInfo.Description,
+                TermsOfService = new Uri(_apiInfo.TermsOfService),
                 Contact = new OpenApiContact
                 {
-                    Name = apiInfo.Contact.Name,
-                    Email = apiInfo.Contact.Email,
-                    Url = new Uri(apiInfo.Contact.Url),
+                    Name = _apiInfo.Contact.Name,
+                    Email = _apiInfo.Contact.Email,
+                    Url = new Uri(_apiInfo.Contact.Url),
                 },
                 License = new OpenApiLicense
                 {
-                    Name = apiInfo.License.Name,
-                    Url = new Uri(apiInfo.License.Url),
+                    Name = _apiInfo.License.Name,
+                    Url = new Uri(_apiInfo.License.Url),
                 }
             };
 
@@ -73,28 +76,6 @@ namespace Banking.Customers.Models
         }
 
           
-    }
-
-    public class ApiInfo
-    {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string TermsOfService { get; set; }
-        public Contact Contact { get; set; }
-        public License License { get; set; }
-    }
-
-    public class Contact
-    {
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Url { get; set; }
-    }
-
-    public class License
-    {
-        public string Name { get; set; }
-        public string Url { get; set; }
     }
 }
 

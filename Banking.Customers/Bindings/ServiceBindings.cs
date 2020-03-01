@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Banking.Customers.Domain.Interfaces;
 using Banking.Customers.Models;
 using Banking.Customers.Services;
@@ -15,6 +16,15 @@ namespace Banking.Customers.Bindings
         {
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSingleton<ICustomerService, CustomerService>();
+
+            services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
+
+
+            //IServiceProvider serviceProvider = services.BuildServiceProvider();
+            //var service = serviceProvider.GetService<IOptionsMonitor<ApiInfo>>();
+
+
+
             return services;
         }
 
