@@ -1,4 +1,5 @@
 ﻿using System;
+using Banking.Customers.Bindings;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,16 +19,21 @@ namespace Banking.Customers.Models
         private readonly IApiVersionDescriptionProvider _provider;
         private readonly IConfiguration _configuration;
         private readonly ApiInfo _apiInfo;
+        private readonly ApiInfo _Info;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.
         /// </summary>
         /// <param name="provider">The <see cref="IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
-        public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider, IConfiguration configuration, IOptionsMonitor<ApiInfo> optionsAccessor)
+        public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider,
+                    IConfiguration configuration,
+                    IOptionsMonitor<ApiInfo> optionsAccessor,
+                    IConfigOptions<ApiInfo> info)
         {
              _provider = provider;
             _configuration = configuration;
             _apiInfo = optionsAccessor.CurrentValue;
+            _Info = info.CurrentValue;
         }
 
         /// <inheritdoc />

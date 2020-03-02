@@ -17,11 +17,11 @@ namespace Banking.Customers.Bindings
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSingleton<ICustomerService, CustomerService>();
 
+            services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>();
+
+
             services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
-
-
-            //IServiceProvider serviceProvider = services.BuildServiceProvider();
-            //var service = serviceProvider.GetService<IOptionsMonitor<ApiInfo>>();
+            services.Configure<ApiInfo>();
 
 
 
@@ -33,5 +33,51 @@ namespace Banking.Customers.Bindings
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<AutoMapper.IConfigurationProvider>(AutoMapperConfig.RegisterMappings());
         }
+
+
+        private static ApiInfo LoadApiInfo(IConfiguration configuration)
+        {
+
+            var apiInfo = configuration.GetSection("ApiInfo").Get<ApiInfo>();
+            return apiInfo;
+        }
+
+
+        private static void DBConfigure<T>(this IServiceCollection services) where T: class
+        {
+            IServiceProvider serviceProvider = services.BuildServiceProvider();
+            var configuration = serviceProvider.GetService<IConfiguration>();
+
+            services.AddSingleton<T>(configuration.GetSection("ApiInfo").Get<T>());
+
+           
+        }
+
+        private static void Configure<T>(this IServiceCollection services) where T : class
+        {
+            services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>(); 
+        }
+
     }
+
+    public class AppConfigurations<T> : IConfigOptions<T> 
+    {
+        private IConfiguration Configuration;
+
+        public AppConfigurations(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public T CurrentValue 
+        {
+            get { return Configuration.GetSection("ApiInfo").Get<T>(); }
+        }
+    }
+
+    public interface IConfigOptions<T>
+    {
+         T CurrentValue { get; }
+    }
+
 }
