@@ -67,12 +67,10 @@ namespace Banking.Customers
             app.UseStaticFiles();
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
-                app.UseExceptionHandler(errorApp =>
-                {
-                    errorApp.Run(async context => await HandleGlobalErrorAsync(context));
-                });
+                app.UseDeveloperExceptionPage(); 
             }
+
+            app.UseGlobalErrorHandler();
 
             app.CreateSeedData();
             app.UseSwaggerSettings(provider);
@@ -92,25 +90,5 @@ namespace Banking.Customers
             });
         }
 
-
-        private async Task HandleGlobalErrorAsync(HttpContext context)
-        {
-
-            var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-
-            var status = new Status { Code = 500, Message = "Internal Server Error", Description = exceptionHandlerPathFeature.Error.ToString() };
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = 500;
-
-            if (exceptionHandlerPathFeature?.Error is UnauthorizedAccessException)
-            {
-                context.Response.StatusCode = 401;
-                status.Code = 401;
-                status.Message = "Unauthorized";
-                status.Description = exceptionHandlerPathFeature.Error.Message;
-            }
-
-            await context.Response.WriteAsync(JsonSerializer.Serialize(status));
-        }
     }
 }

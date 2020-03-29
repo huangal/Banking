@@ -22,6 +22,11 @@ namespace Banking.Customers.Bindings
         {
             return applicationBuilder.UseMiddleware<ClientConfigurationMiddleware>();
         }
+
+        public static IApplicationBuilder UseGlobalErrorHandler(this IApplicationBuilder applicationBuilder)
+        {
+            return applicationBuilder.UseMiddleware<ErrorHandlingMiddleware>();
+        }
     }
 }
     
