@@ -81,9 +81,10 @@ namespace Banking.Customers
 
             app.UseAuthorization();
 
-            app.UseLogger();
+            //Register custom middleware
             app.UseClientConfiguration();
-
+            app.UseLogger();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

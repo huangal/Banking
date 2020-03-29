@@ -23,14 +23,14 @@ namespace Banking.Customers.Bindings
             services.AddSingleton<ICustomerService, CustomerService>();
 
 
-            Log.Logger = new LoggerConfiguration()
-                    .ReadFrom.Configuration(configuration)
-                    .CreateLogger();
 
             //Log.Logger = new LoggerConfiguration()
             //.Enrich.FromLogContext()
             //.WriteTo.Console()
             //.CreateLogger();
+
+            services.RegisterLogger(configuration);
+
 
             services.AddScoped<IClientConfiguration, ClientConfiguration>();
 
@@ -79,13 +79,24 @@ namespace Banking.Customers.Bindings
             var configuration = serviceProvider.GetService<IConfiguration>();
 
             services.AddSingleton<T>(configuration.GetSection("ApiInfo").Get<T>());
-
            
         }
 
 
+        public static IServiceCollection RegisterLogger(this IServiceCollection services, IConfiguration configuration)
+        {
+            var logger = new LoggerConfiguration();
+#if DEBUG
+            string logfile = "/Users/henryhuangal/Projects/AppLogs/Banking-Customer-.log";
+            logger.WriteTo.File(logfile, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+#else
+            logger.ReadFrom.Configuration(configuration);
+#endif
 
-        
+            Log.Logger = logger.CreateLogger();
+            return services;
+        }
+
 
         //private static void Configure<T>(this IServiceCollection services) where T : class
         //{

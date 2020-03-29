@@ -61,7 +61,7 @@ namespace Banking.Customers.Middleware
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = status.Code;
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(status));
+            await httpContext.Response.WriteAsync(status.ToString());
         }
     }
 }
