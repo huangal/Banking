@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Banking.Customers.Controllers.Attributes;
+using Banking.Customers.Controllers.Managers;
 using Banking.Customers.Domain.Interfaces;
 using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +19,14 @@ namespace Banking.Customers.Controllers.v1
     public class CustomersController : ControllerBase
     {
         private ICustomerService _dataService;
+        private readonly IWeatherManager _weatherManager;
+        private readonly IClientConfiguration _clientConfiguration;
 
-        public CustomersController(ICustomerService dataRepositoryService)
+        public CustomersController(ICustomerService dataRepositoryService, IWeatherManager weatherManager, IClientConfiguration clientConfiguration)
         {
             _dataService = dataRepositoryService;
+            _weatherManager = weatherManager;
+            _clientConfiguration = clientConfiguration;
         }
 
         /// <summary>
@@ -77,12 +83,19 @@ namespace Banking.Customers.Controllers.v1
         [ModelValidation]
         public async Task<IActionResult> Post([FromBody] CustomerModel customer)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                var clientName = _clientConfiguration.ClientName;
 
-            var result = await _dataService.CreateCustomerAsync(customer);
+                var result = await _dataService.CreateCustomerAsync(customer);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Status { Code = 500, Message = "Internal Server Error", Description = ex.ToString() });
+            }
+            
         }
 
 
@@ -183,7 +196,25 @@ namespace Banking.Customers.Controllers.v1
         }
 
 
+        [HttpGet("Report")]
+        public async Task<IActionResult> GetReport()
+        {
+            var report = await _weatherManager.GetWeatherForecastAsync("London");
+            return Ok(report);
+        }
 
+  
+
+        [HttpGet("Search")]
+        public async Task<IActionResult> Search(string fragment)
+        {
+            var result = await _dataService.GetByPartialName(fragment);
+            if (!result.Any())
+            {
+                return NotFound(fragment);
+            }
+            return Ok(result);
+        }
 
     }
 }

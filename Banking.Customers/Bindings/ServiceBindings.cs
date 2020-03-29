@@ -1,11 +1,16 @@
 ﻿using System;
 using AutoMapper;
+using Banking.Customers.Controllers.Managers;
 using Banking.Customers.Domain.Interfaces;
+using Banking.Customers.Middleware;
 using Banking.Customers.Models;
 using Banking.Customers.Services;
+using Banking.Enterprise.Configuration.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Banking.Customers.Bindings
@@ -17,13 +22,38 @@ namespace Banking.Customers.Bindings
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSingleton<ICustomerService, CustomerService>();
 
-            services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>();
+
+            Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(configuration)
+                    .CreateLogger();
+
+            //Log.Logger = new LoggerConfiguration()
+            //.Enrich.FromLogContext()
+            //.WriteTo.Console()
+            //.CreateLogger();
+
+            services.AddScoped<IClientConfiguration, ClientConfiguration>();
+
+            // services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>();
+
+            //services.AddSingleton<IConfigOptions<ApiInfo>, ConfigOptions<ApiInfo>>();
+
+            services.AddSingleton<IGreeting, Saludos>();
+
+            services.AddSingleton<IGreeting<EnglishGreetings>, EnglishGreetings>();
 
 
             services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
             services.Configure<ApiInfo>();
 
 
+            services.AddHttpClient<IWeatherForecastService, WeatherForecastService>()
+                .ConfigurePrimaryHttpMessageHandler(handler => new MockWeatherForecastHandler());
+            services.AddSingleton<IWeatherManager, WeatherManager>();
+
+
+            //services.AddHttpClient<IConfigurationService, ConfigurationService>()
+            //   .ConfigurePrimaryHttpMessageHandler(handler => new Return200ResponseHandler());
 
             return services;
         }
@@ -53,31 +83,15 @@ namespace Banking.Customers.Bindings
            
         }
 
-        private static void Configure<T>(this IServiceCollection services) where T : class
-        {
-            services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>(); 
-        }
 
-    }
 
-    public class AppConfigurations<T> : IConfigOptions<T> 
-    {
-        private IConfiguration Configuration;
+        
 
-        public AppConfigurations(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        //private static void Configure<T>(this IServiceCollection services) where T : class
+        //{
+        //    services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>(); 
+        //}
 
-        public T CurrentValue 
-        {
-            get { return Configuration.GetSection("ApiInfo").Get<T>(); }
-        }
-    }
-
-    public interface IConfigOptions<T>
-    {
-         T CurrentValue { get; }
     }
 
 }

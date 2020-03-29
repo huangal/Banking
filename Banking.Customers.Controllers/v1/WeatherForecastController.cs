@@ -4,9 +4,15 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Banking.Customers.Domain;
+using Banking.Customers.Controllers.Attributes;
+using Banking.Customers.Domain.Models;
+using Banking.Customers.Domain.Interfaces;
+using Banking.Customers.Controllers.Managers;
+using System.Threading.Tasks;
 
 namespace Banking.Customers.Controllers.v1
 {
+    
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -18,10 +24,18 @@ namespace Banking.Customers.Controllers.v1
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IGreeting _saludos;
+        private readonly IGreeting _greetings;
+        private readonly IWeatherManager _weatherManager;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            IGreeting saludos, IGreeting<EnglishGreetings> greeting, IWeatherManager weatherManager)
         {
             _logger = logger;
+            _saludos = saludos;
+            _greetings = greeting;
+            _weatherManager = weatherManager;
         }
 
         [HttpGet]
@@ -36,5 +50,35 @@ namespace Banking.Customers.Controllers.v1
             })
             .ToArray();
         }
+
+        [HttpPost("Test")]
+        [ModelValidation]
+        public IActionResult Post([FromBody] CustomerModel customer)
+        {
+            //if (!ModelState.IsValid)
+                //return BadRequest(ModelState);
+            return Ok(customer);
+        }
+
+        [HttpGet("Saludos")]
+        public IActionResult GetSaludos()
+        {
+            return Ok(_saludos.GetGreetings());
+        }
+
+        [HttpGet("Greetings")]
+        public IActionResult GetGreetings()
+        {
+            return Ok(_greetings.GetGreetings());
+        }
+        [HttpGet("Report")]
+        public async Task<IActionResult> GetReport()
+        {
+            var report = await _weatherManager.GetWeatherForecastAsync("London");
+
+
+            return Ok(report);
+        }
+
     }
 }

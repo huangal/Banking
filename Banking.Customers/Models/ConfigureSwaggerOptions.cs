@@ -1,5 +1,6 @@
 ﻿using System;
 using Banking.Customers.Bindings;
+using Banking.Enterprise.Configuration;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

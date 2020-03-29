@@ -17,6 +17,7 @@
     <Folder Include="v1\" />
     <Folder Include="v2\" />
     <Folder Include="Attributes\" />
+    <Folder Include="Managers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Banking.Customers.Data\Banking.Customers.Data.csproj">

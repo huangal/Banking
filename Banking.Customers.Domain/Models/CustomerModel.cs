@@ -31,7 +31,7 @@ namespace Banking.Customers.Domain.Models
         /// <summary>
         /// Email address
         /// </summary>
-        [Required]
+        [Required(ErrorMessage ="Email is required for notifications")]
         [EmailAddress]
         public string Email { get; set; }
         [Required] public string Product { get; set; }

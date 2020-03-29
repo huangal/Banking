@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Banking.Customers.Controllers.Attributes
 {
+
     public class ModelValidationAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -20,18 +22,14 @@ namespace Banking.Customers.Controllers.Attributes
     public class StatusResult : ObjectResult
     {
         public StatusResult(ModelStateDictionary modelState)
-            : base(new Status(modelState, StatusCodes.Status422UnprocessableEntity))
+            : base(new StatusResponse(modelState, StatusCodes.Status422UnprocessableEntity))
         {
             StatusCode = StatusCodes.Status422UnprocessableEntity;
         }
     }
-    public class Status
+    public class StatusResponse: Status
     {
-        public int Code { get; }
-        public string Message { get; }
-        public string Description { get; }
-
-        public Status(ModelStateDictionary modelState, int errorStatusCode)
+        public StatusResponse(ModelStateDictionary modelState, int errorStatusCode)
         {
             Code = errorStatusCode;
             Message = "Validation Failed";

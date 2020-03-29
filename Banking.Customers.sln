@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Services", "Banking.Customers.Services\Banking.Customers.Services.csproj", "{279EA771-A439-42A6-9B79-29290A5D6E77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Controllers.Tests", "Banking.Customers.Controllers.Tests\Banking.Customers.Controllers.Tests.csproj", "{253CD313-1F8D-4B63-908C-01A70F773B0A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Controllers", "Banking.Customers.Controllers\Banking.Customers.Controllers.csproj", "{FBEC32BB-C62A-4D99-AB86-0CC84326D581}"
 EndProject
 Global
@@ -41,10 +39,6 @@ Global
 		{279EA771-A439-42A6-9B79-29290A5D6E77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{279EA771-A439-42A6-9B79-29290A5D6E77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{279EA771-A439-42A6-9B79-29290A5D6E77}.Release|Any CPU.Build.0 = Release|Any CPU
-		{253CD313-1F8D-4B63-908C-01A70F773B0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{253CD313-1F8D-4B63-908C-01A70F773B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{253CD313-1F8D-4B63-908C-01A70F773B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{253CD313-1F8D-4B63-908C-01A70F773B0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBEC32BB-C62A-4D99-AB86-0CC84326D581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FBEC32BB-C62A-4D99-AB86-0CC84326D581}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBEC32BB-C62A-4D99-AB86-0CC84326D581}.Release|Any CPU.ActiveCfg = Release|Any CPU

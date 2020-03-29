@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Banking.Customers.Domain.Models;
 
@@ -14,6 +15,44 @@ namespace Banking.Customers.Domain.Interfaces
         Task<CustomerModel> CreateCustomerAsync(CustomerModel customerModel);
         Task<CustomerModel> UpdateCustomerAsync(CustomerModel customerModel);
         Task<bool> DeleteCustomerAsync(int id);
-      
+        Task<IEnumerable<CustomerModel>> GetByPartialName(string titleFragment);
+
+
     }
+
+
+    public interface IClientConfiguration
+    {
+        string ClientName { get; set; }
+
+        DateTime InvokedDateTime { get; set; }
+    }
+
+
+
+    public interface IGreeting<out T> : IGreeting { }
+
+
+    public interface IGreeting
+    {
+        string GetGreetings();
+    }
+
+    public class Saludos : IGreeting
+    {
+        public string GetGreetings()
+        {
+            return "Buenos dias mis amigos";
+        }
+    }
+
+
+    public class EnglishGreetings : IGreeting<EnglishGreetings>
+    {
+        public string GetGreetings()
+        {
+            return "Good morning my dear friends";
+        }
+    }
+
 }

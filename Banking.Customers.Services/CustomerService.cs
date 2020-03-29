@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -46,6 +47,16 @@ namespace Banking.Customers.Services
             return await _context.Customers.Take(count).ProjectTo<CustomerModel>(_mapperConfiguration).ToListAsync();
         }
 
+
+        public async Task<IEnumerable<CustomerModel>> GetByPartialName(string titleFragment)
+        {
+            return await _context.Customers.Where(x => x.Name.IndexOf(titleFragment, 0, StringComparison.OrdinalIgnoreCase) >= 0)
+                .ProjectTo<CustomerModel>(_mapperConfiguration)
+                .ToListAsync();
+                                
+        }
+
+
         public int GetCustomersCount()
         {
             return _context.Customers.Count();
@@ -92,6 +103,8 @@ namespace Banking.Customers.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+        
 
     }
 }

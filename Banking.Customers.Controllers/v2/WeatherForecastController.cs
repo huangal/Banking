@@ -4,6 +4,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Banking.Customers.Domain;
+using Banking.Customers.Controllers.Attributes;
+using Banking.Customers.Domain.Models;
 
 namespace Banking.Customers.Controllers.v2
 {
@@ -39,6 +41,18 @@ namespace Banking.Customers.Controllers.v2
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpPost("Test")]
+        [ModelValidation]
+        public  IActionResult Post([FromBody] CustomerModel customer)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            
+
+            return Ok();
         }
     }
 }
