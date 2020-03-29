@@ -88,7 +88,8 @@ namespace Banking.Customers.Bindings
             var logger = new LoggerConfiguration();
 #if DEBUG
             string logfile = "/Users/henryhuangal/Projects/AppLogs/Banking-Customer-.log";
-            logger.WriteTo.File(logfile, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true);
+            logger.WriteTo.File(logfile, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
+                  .WriteTo.Console();
 #else
             logger.ReadFrom.Configuration(configuration);
 #endif
