@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Services"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Controllers", "Banking.Customers.Controllers\Banking.Customers.Controllers.csproj", "{FBEC32BB-C62A-4D99-AB86-0CC84326D581}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Enterprise.Configuration", "Banking.Enterprise.Configuration\Banking.Enterprise.Configuration.csproj", "{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,5 +45,9 @@ Global
 		{FBEC32BB-C62A-4D99-AB86-0CC84326D581}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBEC32BB-C62A-4D99-AB86-0CC84326D581}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBEC32BB-C62A-4D99-AB86-0CC84326D581}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

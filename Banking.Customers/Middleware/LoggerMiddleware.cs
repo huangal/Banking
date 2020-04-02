@@ -22,9 +22,8 @@ namespace Banking.Customers.Middleware
             httpContext.Request.EnableBuffering(bufferThreshold: 1024 * 45, bufferLimit: 1024 * 100);
             //using (var reader = new StreamReader(httpContext.Request.Body, encoding: Encoding.UTF8,
             //        detectEncodingFromByteOrderMarks: false, bufferSize: bufferSize, leaveOpen: true))
-            //using (var reader = new StreamReader(httpContext.Request.Body, encoding: Encoding.UTF8,
-            //    detectEncodingFromByteOrderMarks: false, leaveOpen: true))
-            using (var reader = new StreamReader(httpContext.Request.Body, leaveOpen: true))
+            using (var reader = new StreamReader(httpContext.Request.Body, encoding: Encoding.UTF8,
+                detectEncodingFromByteOrderMarks: false, leaveOpen: true))
             {
                 
                 var requestBody = await  reader.ReadToEndAsync();   

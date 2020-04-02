@@ -20,7 +20,7 @@ namespace Banking.Customers.Models
         private readonly IApiVersionDescriptionProvider _provider;
         private readonly IConfiguration _configuration;
         private readonly ApiInfo _apiInfo;
-        private readonly ApiInfo _Info;
+        private readonly Person _person;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.
@@ -29,12 +29,12 @@ namespace Banking.Customers.Models
         public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider,
                     IConfiguration configuration,
                     IOptionsMonitor<ApiInfo> optionsAccessor,
-                    IConfigOptions<ApiInfo> info)
+                    IConfigOptions<Person> configOptions)
         {
              _provider = provider;
             _configuration = configuration;
             _apiInfo = optionsAccessor.CurrentValue;
-            _Info = info.CurrentValue;
+            _person = configOptions.Value;
         }
 
         /// <inheritdoc />

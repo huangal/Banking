@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageId>Banking.Enterprise.Configurations</PackageId>
+    <Authors>Henry Huangal</Authors>
+    <Copyright>Henry Huangal</Copyright>
+    <Owners>Henry Huangal</Owners>
+    <PackageReleaseNotes>Add extensions to include custome IOptions from IConfigurations.</PackageReleaseNotes>
+    <PackageTags>Banking.Enterprise.Configurations</PackageTags>
+    <Title>Banking.Enterprise.Configurations</Title>
+    <Description>Library to extend IConfiguration options with custome configurations</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.3" />
+  </ItemGroup>
+</Project>

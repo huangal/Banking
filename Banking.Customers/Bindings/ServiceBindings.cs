@@ -44,7 +44,7 @@ namespace Banking.Customers.Bindings
 
 
             services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
-            services.Configure<ApiInfo>();
+            services.Configure<Person>();
 
 
             services.AddHttpClient<IWeatherForecastService, WeatherForecastService>()
