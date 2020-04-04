@@ -6,6 +6,10 @@ using Banking.Customers.Models;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Linq;
 using System.Collections.Generic;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Any;
 
 namespace Banking.Customers.Bindings
 {
@@ -18,6 +22,10 @@ namespace Banking.Customers.Bindings
                 {
                     // add a custom operation filter which sets default values
                     options.OperationFilter<SwaggerDefaultValues>();
+
+                    // options.DescribeAllEnumsAsStrings();
+                    //options.SchemaFilter<EnumSchemaFilter>();
+                   // options.AddEnumsWithValuesFixFilters();
 
                     // integrate xml comments
                     XmlCommentsFiles.ForEach(file => options.IncludeXmlComments(file));
@@ -64,4 +72,19 @@ namespace Banking.Customers.Bindings
             }
         }
     }
+
+    public class EnumSchemaFilter : ISchemaFilter
+    {
+        public void Apply(OpenApiSchema model, SchemaFilterContext context)
+        {
+            if (context.Type.IsEnum)
+            {
+                model.Enum.Clear();
+                Enum.GetNames(context.Type)
+                    .ToList()
+                    .ForEach(n => model.Enum.Add(new OpenApiString(n)));
+            }
+        }
+    }
 }
+
