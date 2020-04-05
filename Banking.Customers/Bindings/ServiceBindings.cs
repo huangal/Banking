@@ -85,16 +85,21 @@ namespace Banking.Customers.Bindings
 
         public static IServiceCollection RegisterLogger(this IServiceCollection services, IConfiguration configuration)
         {
-            var logger = new LoggerConfiguration();
-#if DEBUG
-            string logfile = "/Users/henryhuangal/Projects/AppLogs/Banking-Customer-.log";
-            logger.WriteTo.File(logfile, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
-                  .WriteTo.Console();
-#else
-            logger.ReadFrom.Configuration(configuration);
-#endif
+            //var logger = new LoggerConfiguration();
+            //#if DEBUG
+            //            string logfile = "/Users/henryhuangal/Projects/AppLogs/Banking-Customer-.log";
+            //            logger.WriteTo.File(logfile, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
+            //                  .WriteTo.Console();
+            //#else
+            //logger.ReadFrom.Configuration(configuration);
+            //#endif
 
-            Log.Logger = logger.CreateLogger();
+            //Log.Logger = logger.CreateLogger();
+
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
             return services;
         }
 

@@ -8,8 +8,12 @@ namespace Banking.Customers.Domain.Models
 {
     public class CustomerCommunication
     {
+        [Required(ErrorMessage = "Required")]
         public string Value { get; set; }
-        public Priority Priority { get; set; }
+        [Required(ErrorMessage = "Required")]
+        public Priority? Priority { get; set; }
+        [Required(ErrorMessage = "Required")]
+        public Department? Department { get; set; }
     }
 
 
@@ -33,7 +37,7 @@ namespace Banking.Customers.Domain.Models
     /// <summary>
     /// Phone Model
     /// </summary>
-    public class Phone : IValidatableObject
+    public class Phone //: IValidatableObject
     {
         [Required(ErrorMessage = "Required")]
         public string Number { get; set; }
@@ -42,29 +46,29 @@ namespace Banking.Customers.Domain.Models
         [Required(ErrorMessage = "Required type")]
         public PhoneType? PhoneType { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var results = new List<ValidationResult>();
+        //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        //{
+        //    var results = new List<ValidationResult>();
 
-            if (!IsValidResourceGroup(PhoneType.ToString()))
-            {
-                results.Add(new ValidationResult($"Invalid resource group"));
-            }
-            return results;
-        }
+        //    if (!IsValidResourceGroup(PhoneType.ToString()))
+        //    {
+        //        results.Add(new ValidationResult($"Invalid resource group"));
+        //    }
+        //    return results;
+        //}
 
 
-        bool IsValidResourceGroup(string group)
-        {
-            foreach (var c in Enum.GetValues(typeof(PhoneType)))
-            {
-                if (string.Equals(group.Trim(), $"{c}", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        //bool IsValidResourceGroup(string group)
+        //{
+        //    foreach (var c in Enum.GetValues(typeof(PhoneType)))
+        //    {
+        //        if (string.Equals(group.Trim(), $"{c}", StringComparison.CurrentCultureIgnoreCase))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
 
 
