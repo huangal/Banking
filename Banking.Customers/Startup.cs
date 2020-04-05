@@ -31,9 +31,16 @@ namespace Banking.Customers
             //    })
             services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
-                .AddXmlSerializerFormatters()
-                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
-                .AddNewtonsoftJson();
+               // .AddXmlSerializerFormatters()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    //options.JsonSerializerOptions.IgnoreNullValues = true;
+                 })
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                    //options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });
 
 
                // .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);

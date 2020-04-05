@@ -1,5 +1,4 @@
 ﻿using System;
-using Banking.Customers.Bindings;
 using Banking.Enterprise.Configuration;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
@@ -22,10 +21,14 @@ namespace Banking.Customers.Models
         private readonly ApiInfo _apiInfo;
         private readonly Person _person;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigureSwaggerOptions"/> class.
         /// </summary>
         /// <param name="provider">The <see cref="IApiVersionDescriptionProvider">provider</see> used to generate Swagger documents.</param>
+        /// <param name="configuration"></param>
+        /// <param name="optionsAccessor"></param>
+        /// <param name="configOptions"></param>
         public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider,
                     IConfiguration configuration,
                     IOptionsMonitor<ApiInfo> optionsAccessor,
@@ -50,10 +53,6 @@ namespace Banking.Customers.Models
 
         private  OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
         {
-
-           //var apiInfo = _configuration.GetSection("ApiInfo").Get<ApiInfo>();
-
-
             var openApiInfo = new OpenApiInfo
             {
                 Title = _apiInfo.Title,

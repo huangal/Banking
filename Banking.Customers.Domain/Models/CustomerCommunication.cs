@@ -17,6 +17,7 @@ namespace Banking.Customers.Domain.Models
     }
 
 
+    //[JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Department
     {
         SALES,
