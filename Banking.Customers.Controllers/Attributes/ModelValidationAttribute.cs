@@ -33,10 +33,25 @@ namespace Banking.Customers.Controllers.Attributes
         {
             Code = errorStatusCode;
             Message = "Validation Failed";
-            List<string> errors = modelState.Keys
-                .SelectMany(key => modelState[key].Errors.Select(x => $"{key}: {(!string.IsNullOrWhiteSpace(x.ErrorMessage) ? x.ErrorMessage : "")}, "))
+
+             var logs = modelState.Keys
+                .SelectMany(key => modelState[key].Errors
+                .Select(x => new { Name = key, ErrorMessage = !string.IsNullOrWhiteSpace(x.ErrorMessage) ? x.ErrorMessage : ""}))
                 .ToList();
-            foreach (var error in errors) Description += error;
+
+            foreach (var log in logs)
+            {
+                if(log.ErrorMessage.Contains("Error converting value", System.StringComparison.OrdinalIgnoreCase)
+                    && log.ErrorMessage.Contains("System.Nullable", System.StringComparison.OrdinalIgnoreCase))
+                    Description += $"{log.Name}: Invalid Data Type, ";
+                else
+                    Description += $"{log.Name}: {log.ErrorMessage}, ";
+            }
+
+            //List<string> errors = modelState.Keys
+            //    .SelectMany(key => modelState[key].Errors.Select(x => $"{key}: {(!string.IsNullOrWhiteSpace(x.ErrorMessage) ? x.ErrorMessage : "")}, "))
+            //    .ToList();
+            //foreach (var error in errors) Description += error;
             Description = Description.TrimEnd().TrimEnd(',');
         }
     }
