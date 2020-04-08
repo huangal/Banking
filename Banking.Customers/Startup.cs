@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 using System.Text.Json.Serialization;
 
 namespace Banking.Customers
@@ -31,15 +32,21 @@ namespace Banking.Customers
             //    })
             services.AddControllers()
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
-               // .AddXmlSerializerFormatters()
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    //options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    
                  })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-                    //options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    options.SerializerSettings.Error = (sender, args) =>
+                    {
+                        
+                       // throw new Exception("There was an error during deserialization.");
+                        //throw new InvalidCastException("Unable to validate Data Type");
+                    };
                 });
 
 
@@ -80,7 +87,7 @@ namespace Banking.Customers
             app.UseAuthorization();
 
             //Register custom middleware
-            app.UseClientConfiguration();
+           // app.UseClientConfiguration();
             app.UseLogger();
             
             app.UseEndpoints(endpoints =>

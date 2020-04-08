@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using Banking.Customers.Domain.Attributes;
 
 namespace Banking.Customers.Domain.Models
 {
+
+    public class CustomerDepartment: Transaction
+    {
+        public CustomerCommunication customerCommunication { get; set; }
+    }
+
+
     public class CustomerCommunication
     {
         [Required(ErrorMessage = "Required")]
@@ -14,16 +20,13 @@ namespace Banking.Customers.Domain.Models
         public Priority? Priority { get; set; }
         [Required(ErrorMessage = "Required")]
         public Department? Department { get; set; }
+
     }
 
 
-    //[JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum Department
+    public class Transaction
     {
-        SALES,
-        FINANCE,
-        ENGINEERING,
-        MARKETING
+        public Guid TransactionId { get; set; }
     }
 
     // [JsonConverter(typeof(JsonStringEnumConverter))]

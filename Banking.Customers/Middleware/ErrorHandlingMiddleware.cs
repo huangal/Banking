@@ -2,11 +2,12 @@
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Text.Json;
 using Banking.Customers.Domain.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using System.IO;
+
 
 namespace Banking.Customers.Middleware
 {
@@ -22,7 +23,7 @@ namespace Banking.Customers.Middleware
             _env = env;
         }
 
-        public async Task Invoke(HttpContext httpContext /* other dependencies */)
+        public async Task Invoke(HttpContext httpContext)
         {
             try
             {
@@ -36,6 +37,11 @@ namespace Banking.Customers.Middleware
 
         private async Task HandleExceptionAsync(HttpContext httpContext, Exception ex)
         {
+
+            var transaction = GetTransactionId(httpContext);
+
+            var response = new ResponseStatus { TransactionId = transaction.TransactionId };
+
             _logger.LogError(ex.ToString());
 
             var status = new Status
@@ -57,11 +63,46 @@ namespace Banking.Customers.Middleware
                 status.Message = "Unauthorized";
                 status.Description = ex.Message;
             }
+
+            if(ex is InvalidOperationException)
+            {
+                status.Code = (int)HttpStatusCode.BadRequest;
+                status.Message = "Validation Failure";
+                status.Description = "Invalid Data Type. Please review your request and try again.";
+            }
+
+
             // else if (ex is Exception) code = HttpStatusCode.BadRequest;
+            response.Status = status;
 
             httpContext.Response.ContentType = "application/json";
             httpContext.Response.StatusCode = status.Code;
-            await httpContext.Response.WriteAsync(status.ToString());
+            await httpContext.Response.WriteAsync(response.ToString());
+        }
+
+        private Transaction GetTransactionId(HttpContext httpContext)
+        {
+            Transaction transaction = new Transaction { TransactionId = Guid.NewGuid() };
+
+            httpContext.Request.Body.Position = 0;
+            httpContext.Request.EnableBuffering(bufferThreshold: 1024 * 45, bufferLimit: 1024 * 100);
+            using (var reader = new StreamReader(httpContext.Request.Body))
+            {
+                string requestBody = reader.ReadToEndAsync().Result;
+                if (!string.IsNullOrWhiteSpace(requestBody))
+                {
+                    try
+                    {
+                        transaction = Newtonsoft.Json.JsonConvert.DeserializeObject<Transaction>(requestBody);
+                    }
+                    catch (Exception)
+                    {
+                        transaction.TransactionId = Guid.Empty;
+                    }
+                }
+            }
+
+            return transaction;
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Text.Json;
 using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,42 +16,79 @@ namespace Banking.Customers.Controllers.Attributes
         {
             if (!context.ModelState.IsValid)
             {
-                context.Result = new StatusResult(context.ModelState);
+              
+                context.Result = new StatusResult(context);
             }
         }
     }
+
     public class StatusResult : ObjectResult
     {
-        public StatusResult(ModelStateDictionary modelState)
-            : base(new StatusResponse(modelState, StatusCodes.Status422UnprocessableEntity))
+        public StatusResult(ActionExecutingContext context)
+            : base(new StatusResponse(context, StatusCodes.Status400BadRequest))
         {
-            StatusCode = StatusCodes.Status422UnprocessableEntity;
+            StatusCode = StatusCodes.Status400BadRequest;
         }
     }
-    public class StatusResponse: Status
+          
+    public class StatusResponse: ResponseStatus
     {
-        public StatusResponse(ModelStateDictionary modelState, int errorStatusCode)
+        public StatusResponse(ActionExecutingContext context, int errorStatusCode)
         {
-            Code = errorStatusCode;
-            Message = "Validation Failed";
+            var param = context.ActionArguments.SingleOrDefault();
+             var transaction = TransactionRequest.GetTransaction(context);
+
+            ModelStateDictionary modelState = context.ModelState;
+            TransactionId = transaction.TransactionId;
+            Status.Code = errorStatusCode;
+            Status.Message = "Validation Failed";
 
             var errors = modelState.Keys
                 .SelectMany(key => modelState[key].Errors.Select(x => GetErrorMessage(key, x.ErrorMessage)));
 
-            foreach (string error in errors) Description += error;
+            foreach (string error in errors) Status.Description += error;
 
-            Description = Description.TrimEnd().TrimEnd(',');
+            Status.Description = Status.Description.TrimEnd().TrimEnd(',');
         }
 
         private string GetErrorMessage(string key, string message)
         {
             if (string.IsNullOrWhiteSpace(message)) return string.Empty;
-
             return message.Contains("Error converting value", System.StringComparison.OrdinalIgnoreCase)
-                   && message.Contains("System.Nullable", System.StringComparison.OrdinalIgnoreCase)
                 ? $"{key}: Invalid Data Type, "
                 : $"{key}: {message}, ";
         }
+    }
 
+    public class TransactionRequest
+    {
+        public class Transaction
+        {
+            public Guid TransactionId { get; set; } = Guid.NewGuid();
+            
+            public bool IsValidGuid()
+            {
+                return (Guid.TryParse(TransactionId.ToString(), out var guid) && guid != Guid.Empty);
+            }
+        }
+
+        public static Transaction GetTransaction(ActionExecutingContext context)
+        {
+            Transaction transaction = new Transaction();
+            if (context.ActionArguments.Keys.Any())
+            {
+                var value = context.ActionArguments.Values.FirstOrDefault();
+                if (value != null)
+                {
+                    var requestBody = JsonSerializer.Serialize(value);
+                    if (!string.IsNullOrWhiteSpace(requestBody))
+                    {
+                        transaction = JsonSerializer.Deserialize<Transaction>(requestBody);
+                        if (!transaction.IsValidGuid()) transaction.TransactionId = Guid.NewGuid();
+                    }
+                }
+            }
+            return transaction;
+        }
     }
 }
