@@ -1,5 +1,7 @@
 using Banking.Customers.Bindings;
 using Banking.Customers.Data;
+using Banking.Customers.Models;
+using Banking.Customers.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -9,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Text.Json.Serialization;
+using Banking.Customers.Filters;
 
 namespace Banking.Customers
 {
@@ -17,6 +20,8 @@ namespace Banking.Customers
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //public static void Setup(string appName, string appVersion, bool logToFile, string logFilePath = ".\\logs\\", bool renderMessageTemplate = false)
+            CustomSerilogConfigurator.Setup("TestApp","1.4.3",true,"/Users/henryhuangal/Projects/AppLogs/BankingCustomer.txt");//     .Setup("doc-stack-app-api", false);
         }
 
         public IConfiguration Configuration { get; }
@@ -30,7 +35,10 @@ namespace Banking.Customers
             //    {
             //        options.SuppressModelStateInvalidFilter = true;
             //    })
-            services.AddControllers()
+
+            services.AddHttpContextAccessor();
+
+            services.AddControllers(options => options.Filters.Add(new TrackPerformanceFilter()))
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
                 .AddJsonOptions(options => {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -61,6 +69,7 @@ namespace Banking.Customers
            services.AddDbContext<CustomersContext>(context => { context.UseInMemoryDatabase("Customers"); });
 
             services.AddSwaggerSettings();
+            services.AddAppAuthorization();
 
 
         }
@@ -68,6 +77,7 @@ namespace Banking.Customers
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
+            
 
             app.UseStaticFiles();
             if (env.IsDevelopment())
@@ -75,21 +85,28 @@ namespace Banking.Customers
                 app.UseDeveloperExceptionPage(); 
             }
 
+            app.UsePathBase("/Banking");
+
             app.UseGlobalErrorHandler();
 
             app.CreateSeedData();
             app.UseSwaggerSettings(provider);
 
             app.UseHttpsRedirection();
-
+           
             app.UseRouting();
 
+            
             app.UseAuthorization();
 
             //Register custom middleware
-           // app.UseClientConfiguration();
-            app.UseLogger();
-            
+            // app.UseClientConfiguration();
+             app.UseLogger();
+
+            app.UseClientConfiguration();
+
+            // app.UseJsonErrorHandler();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

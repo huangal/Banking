@@ -39,7 +39,7 @@ namespace Banking.Customers.Controllers.Attributes
              var transaction = TransactionRequest.GetTransaction(context);
 
             ModelStateDictionary modelState = context.ModelState;
-            TransactionId = transaction.TransactionId;
+            TransactionId = (Guid)transaction.TransactionId;
             Status.Code = errorStatusCode;
             Status.Message = "Validation Failed";
 
@@ -64,7 +64,7 @@ namespace Banking.Customers.Controllers.Attributes
     {
         public class Transaction
         {
-            public Guid TransactionId { get; set; } = Guid.NewGuid();
+            public Guid? TransactionId { get; set; } = Guid.NewGuid();
             
             public bool IsValidGuid()
             {
@@ -75,6 +75,7 @@ namespace Banking.Customers.Controllers.Attributes
         public static Transaction GetTransaction(ActionExecutingContext context)
         {
             Transaction transaction = new Transaction();
+
             if (context.ActionArguments.Keys.Any())
             {
                 var value = context.ActionArguments.Values.FirstOrDefault();

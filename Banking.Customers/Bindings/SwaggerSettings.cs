@@ -2,14 +2,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
-using Banking.Customers.Models;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Linq;
 using System.Collections.Generic;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Any;
+using Banking.Customers.OpenApi;
 
 namespace Banking.Customers.Bindings
 {
@@ -22,11 +19,6 @@ namespace Banking.Customers.Bindings
                 {
                     // add a custom operation filter which sets default values
                     options.OperationFilter<SwaggerDefaultValues>();
-
-                    // options.DescribeAllEnumsAsStrings();
-                    //options.SchemaFilter<EnumSchemaFilter>();
-                   // options.AddEnumsWithValuesFixFilters();
-
                     // integrate xml comments
                     XmlCommentsFiles.ForEach(file => options.IncludeXmlComments(file));
                 });
@@ -36,7 +28,16 @@ namespace Banking.Customers.Bindings
         public static void UseSwaggerSettings(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
             // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwagger();
+            app.UseSwagger( options => {
+                options.SerializeAsV2 = false;
+                options.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+                {
+                    swaggerDoc.Servers = new List<OpenApiServer>
+                    {
+                        new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}{httpReq.PathBase}" }
+                    };
+                });
+            });
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
@@ -45,18 +46,19 @@ namespace Banking.Customers.Bindings
                 // build a swagger endpoint for each discovered API version
                 foreach (var description in provider.ApiVersionDescriptions)
                 {
-                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    options.SwaggerEndpoint($"/banking/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    options.DocumentTitle = "Banking.Customers.API";
                 }
                                
             });
 
             
-
-            app.UseReDoc(c =>
+            //Add swagger eDocumentation
+            app.UseReDoc(options =>
             {
-                c.SpecUrl = $"/swagger/{provider.ApiVersionDescriptions.Last().GroupName}/swagger.json";
-                c.DocumentTitle = "Banking.Customers";
-                c.ConfigObject = new Swashbuckle.AspNetCore.ReDoc.ConfigObject()
+                options.SpecUrl = $"/banking/swagger/{provider.ApiVersionDescriptions.Last().GroupName}/swagger.json";
+                options.DocumentTitle = "Banking.Customers";
+                options.ConfigObject = new Swashbuckle.AspNetCore.ReDoc.ConfigObject()
                 {
                 };
             });
@@ -73,18 +75,6 @@ namespace Banking.Customers.Bindings
         }
     }
 
-    public class EnumSchemaFilter : ISchemaFilter
-    {
-        public void Apply(OpenApiSchema model, SchemaFilterContext context)
-        {
-            if (context.Type.IsEnum)
-            {
-                model.Enum.Clear();
-                Enum.GetNames(context.Type)
-                    .ToList()
-                    .ForEach(n => model.Enum.Add(new OpenApiString(n)));
-            }
-        }
-    }
+    
 }
 

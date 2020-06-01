@@ -35,6 +35,10 @@ namespace Banking.Customers.Services
                 .ProjectTo<CustomerModel>(_mapperConfiguration)
                 .FirstOrDefaultAsync();
 
+            //return await _context.Customers.Where(x => x.Id == id)
+            //    .ProjectTo<CustomerModel>(_mapperConfiguration)
+            //    .FirstOrDefaultAsync();
+
         }
 
         public async Task<IEnumerable<CustomerModel>> GetCustomersAsync()

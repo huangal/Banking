@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Banking.Customers.Domain\Banking.Customers.Domain.csproj" />
+    <ProjectReference Include="..\Banking.Customers.Services\Banking.Customers.Services.csproj" />
+  </ItemGroup>
+</Project>

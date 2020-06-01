@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Banking.Customers.Controllers.Attributes;
 using Banking.Customers.Controllers.Managers;
+using Banking.Customers.Controllers.Policies;
+using Banking.Customers.Domain.Extensions;
 using Banking.Customers.Domain.Interfaces;
 using Banking.Customers.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Banking.Customers.Controllers.v1
 {
@@ -21,12 +26,15 @@ namespace Banking.Customers.Controllers.v1
         private ICustomerService _dataService;
         private readonly IWeatherManager _weatherManager;
         private readonly IClientConfiguration _clientConfiguration;
+        private ILogger _logger;
 
-        public CustomersController(ICustomerService dataRepositoryService, IWeatherManager weatherManager, IClientConfiguration clientConfiguration)
+        public CustomersController(ICustomerService dataRepositoryService, IWeatherManager weatherManager,
+            IClientConfiguration clientConfiguration, ILogger<CustomersController> logger)
         {
             _dataService = dataRepositoryService;
             _weatherManager = weatherManager;
             _clientConfiguration = clientConfiguration;
+            _logger = logger;
         }
 
         /// <summary>
@@ -34,6 +42,7 @@ namespace Banking.Customers.Controllers.v1
         /// </summary>
         /// <returns>List of Cutomer objects</returns>
         [HttpGet]
+        [Authorize(PolicyType.PartnerAccess)]
         public async Task<IActionResult> Get()
         {
             var customers = await _dataService.GetCustomersAsync();
@@ -56,8 +65,27 @@ namespace Banking.Customers.Controllers.v1
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var customer = await _dataService.GetCustomersAsync(id);
-            return customer != null ? Ok(customer) : (IActionResult)NotFound();
+            try
+            {
+                var customer = await _dataService.GetCustomersAsync(id);
+                return customer != null ? Ok(customer) : (IActionResult)NotFound(new Status
+                {
+                    Code = (int)HttpStatusCode.NotFound,
+                    Message = "Not Found",
+                    Description = "An internal server error has occurred.  Please, try later."
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error with formatter");
+                //string error = communication.Serialize();
+                //_logger.LogError( "Error Creating Contact {0}", communication.Priority);
+                _logger.LogException(ex, $"Error Getting Customer \"{id}\"");
+
+                // _logger.LogError($"{ex.ToString().ParseToPlain()}");
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
+
         }
 
 
@@ -150,16 +178,25 @@ namespace Banking.Customers.Controllers.v1
         [ModelValidation]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var response = await _dataService.GetCustomersAsync(id);
-            if (response == null) return NotFound();
+                var response = await _dataService.GetCustomersAsync(id);
+                if (response == null) return NotFound();
 
-            var result = await _dataService.DeleteCustomerAsync(id);
-            if (!result) return Content(StatusCodes.Status406NotAcceptable.ToString(), "Unable to process your request.");
+                var result = await _dataService.DeleteCustomerAsync(id);
+                if (!result) return Content(StatusCodes.Status406NotAcceptable.ToString(), "Unable to process your request.");
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error Deleting");
+            
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
 
@@ -195,7 +232,7 @@ namespace Banking.Customers.Controllers.v1
             return Ok(count);
         }
 
-
+        [ApiExplorerSettings(IgnoreApi = true)]
         [HttpGet("Report")]
         public async Task<IActionResult> GetReport()
         {
@@ -203,8 +240,8 @@ namespace Banking.Customers.Controllers.v1
             return Ok(report);
         }
 
-  
 
+        [ApiExplorerSettings(IgnoreApi =true)]
         [HttpGet("Search")]
         public async Task<IActionResult> Search(string fragment)
         {

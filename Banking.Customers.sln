@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Controlle
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Enterprise.Configuration", "Banking.Enterprise.Configuration\Banking.Enterprise.Configuration.csproj", "{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.Engines", "Banking.Customers.Engines\Banking.Customers.Engines.csproj", "{F756B0F5-72CA-4162-B055-E19693FC0402}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Banking.Customers.OpenApi", "Banking.Customers.OpenApi\Banking.Customers.OpenApi.csproj", "{7056EC48-450C-4477-A063-258D5AA89883}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,5 +53,13 @@ Global
 		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE08C25E-4E1A-4E56-8FBF-0D47DE6D913F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F756B0F5-72CA-4162-B055-E19693FC0402}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F756B0F5-72CA-4162-B055-E19693FC0402}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F756B0F5-72CA-4162-B055-E19693FC0402}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F756B0F5-72CA-4162-B055-E19693FC0402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7056EC48-450C-4477-A063-258D5AA89883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7056EC48-450C-4477-A063-258D5AA89883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7056EC48-450C-4477-A063-258D5AA89883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7056EC48-450C-4477-A063-258D5AA89883}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

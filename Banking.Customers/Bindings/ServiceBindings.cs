@@ -2,16 +2,18 @@
 using AutoMapper;
 using Banking.Customers.Controllers.Managers;
 using Banking.Customers.Domain.Interfaces;
-using Banking.Customers.Middleware;
 using Banking.Customers.Models;
 using Banking.Customers.Services;
 using Banking.Enterprise.Configuration.Extensions;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Wkhtmltopdf.NetCore;
+using Banking.Customers.Engines;
+using Banking.Customers.OpenApi;
+using Banking.Customers.OpenApi.Models;
 
 namespace Banking.Customers.Bindings
 {
@@ -19,10 +21,13 @@ namespace Banking.Customers.Bindings
     {
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigurationSwaggerOptions>();
+            services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
+
+
             services.AddSingleton<ICustomerService, CustomerService>();
 
-
+            //services.AddSingleton<IAuthorizationHandler, PartnerAccessHandler>();
 
             //Log.Logger = new LoggerConfiguration()
             //.Enrich.FromLogContext()
@@ -34,6 +39,8 @@ namespace Banking.Customers.Bindings
 
             services.AddScoped<IClientConfiguration, ClientConfiguration>();
 
+           
+
             // services.AddSingleton<IConfigOptions<ApiInfo>, AppConfigurations<ApiInfo>>();
 
             //services.AddSingleton<IConfigOptions<ApiInfo>, ConfigOptions<ApiInfo>>();
@@ -43,7 +50,7 @@ namespace Banking.Customers.Bindings
             services.AddSingleton<IGreeting<EnglishGreetings>, EnglishGreetings>();
 
 
-            services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
+            
             services.Configure<Person>();
 
 
@@ -54,6 +61,14 @@ namespace Banking.Customers.Bindings
 
             //services.AddHttpClient<IConfigurationService, ConfigurationService>()
             //   .ConfigurePrimaryHttpMessageHandler(handler => new Return200ResponseHandler());
+
+            services.AddHttpClient();
+
+            services.AddSingleton<IImageService, ImageService>();
+            services.AddWkhtmltopdf("wkhtmltopdf");
+
+            services.AddSingleton<IPdfEngine, PdfEngine>();
+
 
             return services;
         }
@@ -85,21 +100,40 @@ namespace Banking.Customers.Bindings
 
         public static IServiceCollection RegisterLogger(this IServiceCollection services, IConfiguration configuration)
         {
-            //var logger = new LoggerConfiguration();
-            //#if DEBUG
-            //            string logfile = "/Users/henryhuangal/Projects/AppLogs/Banking-Customer-.log";
-            //            logger.WriteTo.File(logfile, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true)
-            //                  .WriteTo.Console();
-            //#else
-            //logger.ReadFrom.Configuration(configuration);
-            //#endif
 
-            //Log.Logger = logger.CreateLogger();
+            //var formatter = new SplunkFormatter();
+            var formatter = new CustomSerilogFormatter("TestApp", "1.2.3");
+            //formatter.FormatEvent(logEvent, output, new JsonValueFormatter(typeTagName: "$type"));  
 
+#if DEBUG
+            string logfile = configuration["logFile"];
 
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
+                 .WriteTo.File(logfile,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 7,
+                outputTemplate: "Timestamp={Timestamp:yyyy-MM-dd HH:mm:ss fff}|Level={Level:u3}|Application=\"{Application}\"|Message=\"{Message}\"|Exception=\"{Exception}\" {NewLine} ")
+                .Enrich.WithProperty("Application", "Banking.Customer")
+                 .WriteTo.Console()
+                  .CreateLogger();
+#else
+            Log.Logger = new LoggerConfiguration()
+                            .ReadFrom.Configuration(configuration)
+                            //.Enrich.WithExceptionDetails()
+                            .CreateLogger();
+#endif
+
+           
+
+            //Log.Logger = new LoggerConfiguration()
+            //    .ReadFrom.Configuration(configuration)
+            //    .CreateLogger();
+
+
+
+
+
+
             return services;
         }
 

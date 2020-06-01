@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Banking.Customers.Domain.Constants;
 using Banking.Customers.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
@@ -18,13 +19,13 @@ namespace Banking.Customers.Middleware
 
         public async Task InvokeAsync(HttpContext httpContext, IClientConfiguration clientConfiguration)
         {
-            if (httpContext.Request.Headers.TryGetValue("CLIENTNAME", out StringValues clientName))
+            if (httpContext.Request.Headers.TryGetValue(ApplicationHelper.ClientHeader, out StringValues clientName))
             {
                 clientConfiguration.ClientName = clientName.SingleOrDefault();
             }
             else
             {
-                throw new UnauthorizedAccessException("Unable to authenticate client");
+               // throw new UnauthorizedAccessException("Unable to authenticate client");
 
             }
 

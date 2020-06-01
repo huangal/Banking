@@ -16,14 +16,21 @@ namespace Banking.Customers.Domain.Models
     }
 
 
-    public class ResponseStatus
+    public class ResponseStatus: Transaction
     {
-        public Guid? TransactionId { get; set; }
         public Status Status { get; set; } = new Status();
 
         public override string ToString()
         {
             return JsonSerializer.Serialize(this);
+        }
+    }
+
+    public static class JsonExtensions
+    {
+        public static string Serialize<T>(this T value) where T: class
+        {
+            return JsonSerializer.Serialize(value);
         }
     }
 }

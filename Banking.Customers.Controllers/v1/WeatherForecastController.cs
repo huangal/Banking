@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Banking.Customers.Controllers.v1
 {
-    
+    [ApiExplorerSettings(IgnoreApi = true)]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
