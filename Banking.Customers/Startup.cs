@@ -70,7 +70,7 @@ namespace Banking.Customers
 
             services.AddSwaggerSettings();
             services.AddAppAuthorization();
-
+            services.AddDataProtection();
 
         }
 

@@ -27,14 +27,17 @@ namespace Banking.Customers.Controllers.v1
         private readonly IWeatherManager _weatherManager;
         private readonly IClientConfiguration _clientConfiguration;
         private ILogger _logger;
+        private readonly IServiceDataProtection _dataProtection;
+
 
         public CustomersController(ICustomerService dataRepositoryService, IWeatherManager weatherManager,
-            IClientConfiguration clientConfiguration, ILogger<CustomersController> logger)
+            IClientConfiguration clientConfiguration, ILogger<CustomersController> logger,IServiceDataProtection dataProtection)
         {
             _dataService = dataRepositoryService;
             _weatherManager = weatherManager;
             _clientConfiguration = clientConfiguration;
             _logger = logger;
+            _dataProtection = dataProtection;
         }
 
         /// <summary>
@@ -250,6 +253,14 @@ namespace Banking.Customers.Controllers.v1
             {
                 return NotFound(fragment);
             }
+            return Ok(result);
+        }
+
+
+        [HttpPost("Decode")]
+        public IActionResult Decode([FromBody] string data)
+        {
+            var result = _dataProtection.Decrypt(data);
             return Ok(result);
         }
 

@@ -14,6 +14,7 @@ using Wkhtmltopdf.NetCore;
 using Banking.Customers.Engines;
 using Banking.Customers.OpenApi;
 using Banking.Customers.OpenApi.Models;
+using Banking.Customers.Security;
 
 namespace Banking.Customers.Bindings
 {
@@ -68,6 +69,11 @@ namespace Banking.Customers.Bindings
             services.AddWkhtmltopdf("wkhtmltopdf");
 
             services.AddSingleton<IPdfEngine, PdfEngine>();
+
+            services.AddSingleton<UniqueCode>();
+            services.AddSingleton<IServiceDataProtection, ServiceDataProtection>();
+
+
 
 
             return services;

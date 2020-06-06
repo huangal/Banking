@@ -40,6 +40,7 @@
     <Folder Include="Filters\" />
     <Folder Include="wkhtmltopdf\" />
     <Folder Include="wkhtmltopdf\Mac\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Banking.Customers.Data\Banking.Customers.Data.csproj">
