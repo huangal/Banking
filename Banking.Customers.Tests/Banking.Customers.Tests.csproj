@@ -9,17 +9,32 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 <PrivateAssets>all</PrivateAssets>
 </PackageReference>
     <PackageReference Include="coverlet.collector" Version="1.3.0"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 <PrivateAssets>all</PrivateAssets>
 </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.6" />
+  
+    <PackageReference Include="RESTFulSense" Version="1.4.0" />
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Banking.Customers.Domain\Banking.Customers.Domain.csproj" />
     <ProjectReference Include="..\Banking.Customers.Data\Banking.Customers.Data.csproj" />
     <ProjectReference Include="..\Banking.Customers\Banking.Customers.csproj" />
+    <ProjectReference Include="..\Banking.Customers.OpenApi\Banking.Customers.OpenApi.csproj" />
+    <ProjectReference Include="..\Banking.Customers.Services\Banking.Customers.Services.csproj" />
+    <ProjectReference Include="..\Banking.Enterprise.Configuration\Banking.Enterprise.Configuration.csproj" />
+    <ProjectReference Include="..\Banking.Customers.Controllers\Banking.Customers.Controllers.csproj" />
+    <ProjectReference Include="..\Banking.Customers.Engines\Banking.Customers.Engines.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Controllers\v1\" />
+    <Folder Include="Brokers\" />
+    <Folder Include="Extenstions\" />
   </ItemGroup>
 </Project>

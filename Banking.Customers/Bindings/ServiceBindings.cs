@@ -7,12 +7,9 @@ using Banking.Customers.Services;
 using Banking.Enterprise.Configuration.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Serilog;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Wkhtmltopdf.NetCore;
 using Banking.Customers.Engines;
-using Banking.Customers.OpenApi;
 using Banking.Customers.OpenApi.Models;
 using Banking.Customers.Security;
 
@@ -22,10 +19,7 @@ namespace Banking.Customers.Bindings
     {
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigurationSwaggerOptions>();
-            services.Configure<ApiInfo>(configuration.GetSection("ApiInfo"));
-
-
+           
             services.AddSingleton<ICustomerService, CustomerService>();
 
             //services.AddSingleton<IAuthorizationHandler, PartnerAccessHandler>();
@@ -79,10 +73,12 @@ namespace Banking.Customers.Bindings
             return services;
         }
 
-        public static void AddAutoMapper(this IServiceCollection services)
+        public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddSingleton<AutoMapper.IConfigurationProvider>(AutoMapperConfig.RegisterMappings());
+
+            return services;
         }
 
 

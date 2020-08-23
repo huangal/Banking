@@ -4,7 +4,7 @@ namespace Banking.Customers.Bindings
 {
     public static class VersioningSettings
     {
-        public static void AddVersioning(this IServiceCollection services)
+        public static IServiceCollection AddVersioning(this IServiceCollection services)
         {
             services.AddApiVersioning(
                 options =>
@@ -19,6 +19,8 @@ namespace Banking.Customers.Bindings
                     options.GroupNameFormat = "'v'VVV";
                     options.SubstituteApiVersionInUrl = true;
                 });
+
+            return services;
         }
     }
 }

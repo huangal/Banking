@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Banking.Customers.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -35,12 +39,21 @@ namespace Banking.Customers.OpenApi
         /// <inheritdoc />
         public void Configure(SwaggerGenOptions options)
         {
+
+            options.OperationFilter<SwaggerDefaultValues>();
+            options.OperationFilter<AddRequiredHeaderParameter>();
+
             // add a swagger document for each discovered API version
             // note: you might choose to skip or document deprecated API versions differently
             foreach (var description in _provider.ApiVersionDescriptions)
             {
                 options.SwaggerDoc(description.GroupName, CreateInfoForApiVersion(description));
             }
+
+            // integrate xml comments
+            XmlCommentsFiles.ForEach(file => options.IncludeXmlComments(file, includeControllerXmlComments: true));
+
+            options.CustomSchemaIds(x => $"Models.{x.Name}");
         }
 
         private OpenApiInfo CreateInfoForApiVersion(ApiVersionDescription description)
@@ -73,6 +86,15 @@ namespace Banking.Customers.OpenApi
             return openApiInfo;
         }
 
+
+        private static List<string> XmlCommentsFiles
+        {
+            get
+            {
+                var basePath = PlatformServices.Default.Application.ApplicationBasePath;
+                return Directory.GetFiles(basePath, "*.xml", SearchOption.TopDirectoryOnly).ToList();
+            }
+        }
 
     }
 }

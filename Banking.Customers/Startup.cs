@@ -40,37 +40,40 @@ namespace Banking.Customers
 
             services.AddControllers(options => options.Filters.Add(new TrackPerformanceFilter()))
                 .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
-                .AddJsonOptions(options => {
+                .AddJsonOptions(options =>
+                {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                     options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
                     
-                 })
+
+                })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
                     options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
-                    options.SerializerSettings.Error = (sender, args) =>
-                    {
-                        
-                       // throw new Exception("There was an error during deserialization.");
-                        //throw new InvalidCastException("Unable to validate Data Type");
-                    };
+                    //options.SerializerSettings.Error = (sender, args) =>
+                    //{
+
+                    //    // throw new Exception("There was an error during deserialization.");
+                    //    //throw new InvalidCastException("Unable to validate Data Type");
+                    //};
+
+                    options.UseMemberCasing();
+
                 });
 
 
-               // .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            // .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
-            services.AddVersioning();
+            services.AddVersioning()
+                .RegisterServices(Configuration)
+                .AddAutoMapper()
+                .AddSwaggerSettings(Configuration)
+                .AddAppAuthorization()
+                .AddDataProtection();
 
-            services.RegisterServices(Configuration);
-
-           services.AddAutoMapper();
-
-           services.AddDbContext<CustomersContext>(context => { context.UseInMemoryDatabase("Customers"); });
-
-            services.AddSwaggerSettings();
-            services.AddAppAuthorization();
-            services.AddDataProtection();
+            services.AddDbContext<CustomersContext>(context => { context.UseInMemoryDatabase("Customers"); });
 
         }
 
@@ -100,8 +103,8 @@ namespace Banking.Customers
             app.UseAuthorization();
 
             //Register custom middleware
-            // app.UseClientConfiguration();
-             app.UseLogger();
+            app.UseClientConfiguration();
+            // app.UseLogger();
 
             app.UseClientConfiguration();
 

@@ -32,6 +32,8 @@ namespace Banking.Customers.Middleware
             if (!string.IsNullOrEmpty(requestBody)) requestBody = requestBody.Replace('\n',' ').Replace('\r', ' ').Replace('\t',' ');
             //_logger.LogInformation($"Request:{requestBody}");
 
+            requestBody = clientName;
+
             _logger.LogInformation($"Request:{_dataProtection.Encrypt(requestBody)}");
 
             //httpContext.Request.EnableBuffering(bufferThreshold: 1024 * 45, bufferLimit: 1024 * 100);

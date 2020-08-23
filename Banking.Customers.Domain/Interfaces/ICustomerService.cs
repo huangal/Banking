@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Banking.Customers.Domain.Models;
 
@@ -18,14 +17,6 @@ namespace Banking.Customers.Domain.Interfaces
         Task<IEnumerable<CustomerModel>> GetByPartialName(string titleFragment);
 
 
-    }
-
-
-    public interface IClientConfiguration
-    {
-        string ClientName { get; set; }
-
-        DateTime InvokedDateTime { get; set; }
     }
 
 

@@ -1,6 +1,5 @@
 ﻿
 using Banking.Customers.Controllers.Policies;
-using Banking.Customers.Domain.Constants;
 using BBanking.Customers.Controllers.Policies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;

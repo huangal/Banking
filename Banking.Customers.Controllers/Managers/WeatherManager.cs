@@ -26,7 +26,7 @@ namespace Banking.Customers.Controllers.Managers
 
         public async Task<WeatherResponse> GetWeatherForecastAsync(string location)
         {
-            if (WeatherReport != null) return WeatherReport;
+           // if (WeatherReport != null) return WeatherReport;
 
             WeatherReport = await _service.GetWeatherForecastAsync(location);
             return WeatherReport;

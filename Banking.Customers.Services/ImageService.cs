@@ -21,6 +21,12 @@ namespace Banking.Customers.Services
         public  string GetImageAsync(string imageUrl)
         {
             var client = ClientFactory.CreateClient();
+
+            //var handler = new HttpClientHandler();
+            //handler.ClientCertificates.Add(certificate);
+
+
+
             var response =  client.GetAsync(imageUrl).Result;
             if (response.IsSuccessStatusCode)
             {

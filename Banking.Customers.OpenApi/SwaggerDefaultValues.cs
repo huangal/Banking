@@ -44,6 +44,12 @@ namespace Banking.Customers.OpenApi
 
                 parameter.Required |= description.IsRequired;
             }
+
+
+
+            
+
+
         }
     }
 }

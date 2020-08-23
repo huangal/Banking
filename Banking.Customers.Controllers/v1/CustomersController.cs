@@ -20,6 +20,7 @@ namespace Banking.Customers.Controllers.v1
     /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
+    [Produces("application/json")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class CustomersController : ControllerBase
     {
@@ -46,7 +47,7 @@ namespace Banking.Customers.Controllers.v1
         /// <returns>List of Cutomer objects</returns>
         [HttpGet]
         [Authorize(PolicyType.PartnerAccess)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetCustomers()
         {
             var customers = await _dataService.GetCustomersAsync();
             if (!customers.Any()) return NotFound();
@@ -66,7 +67,8 @@ namespace Banking.Customers.Controllers.v1
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CustomerModel))]
+        public async Task<IActionResult> GetCustomer(int id)
         {
             try
             {
@@ -96,23 +98,23 @@ namespace Banking.Customers.Controllers.v1
         /// Create a new customer
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Sample request: This crate a new **Customer**
         ///
         ///     POST api/Customers
-        ///     {
-        ///       "name": "Peter",
-        ///       "last": "Doe",
-        ///       "age": 45,
-        ///       "email": "user@example.com",
-        ///       "product": "VISA"
-        ///      }
+        ///         {
+        ///             "name": "Peter",
+        ///             "last": "Doe",
+        ///             "age": 45,
+        ///             "email": "user@example.com",
+        ///             "product": "VISA"
+        ///         }
         ///
         /// </remarks>
         /// <param name="customer"></param>
         /// <returns></returns>
         [HttpPost]
         [ModelValidation]
-        public async Task<IActionResult> Post([FromBody] CustomerModel customer)
+        public async Task<IActionResult> CreateCustomer([FromBody] CustomerModel customer)
         {
             try
             {
@@ -152,7 +154,7 @@ namespace Banking.Customers.Controllers.v1
         /// <returns></returns>
         [HttpPut("{id}")]
         [ModelValidation]
-        public async Task<IActionResult> Put([FromBody] CustomerModel customer, [FromRoute] int id)
+        public async Task<IActionResult> UpdateCustomer([FromBody] CustomerModel customer, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -179,7 +181,7 @@ namespace Banking.Customers.Controllers.v1
         /// <returns></returns>
         [HttpDelete("{id}")]
         [ModelValidation]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        public async Task<IActionResult> DeleteCustomer([FromRoute] int id)
         {
             try
             {
@@ -235,11 +237,11 @@ namespace Banking.Customers.Controllers.v1
             return Ok(count);
         }
 
-        [ApiExplorerSettings(IgnoreApi = true)]
-        [HttpGet("Report")]
-        public async Task<IActionResult> GetReport()
+       // [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpGet("Report/{location}")]
+        public async Task<IActionResult> GetReport(string location)
         {
-            var report = await _weatherManager.GetWeatherForecastAsync("London");
+            var report = await _weatherManager.GetWeatherForecastAsync(location);
             return Ok(report);
         }
 
@@ -260,8 +262,19 @@ namespace Banking.Customers.Controllers.v1
         [HttpPost("Decode")]
         public IActionResult Decode([FromBody] string data)
         {
-            var result = _dataProtection.Decrypt(data);
-            return Ok(result);
+            string encrypted = "CfDJ8K3aWspf8pRNgo2HuquMzZl9kKzeSoZUILUFo90ADVzPmf5lJm7xhvvOIjtUZ_-D6ZYELZgj4iup_nPP-Stv6-OxJ4upTPrLL3_wwu7s2OPK298s2YoPoORhK70WYbbuRgP4PUWzO1ebRCgpX9J7j7zuji7xgE3tT0zJMfQX4mlU";
+
+
+            string decrypted;
+
+            var isDectypted = _dataProtection.TryDecrypt(encrypted, out decrypted);
+
+            if (isDectypted) return Ok(decrypted);
+            return Unauthorized();
+
+
+            //var result = _dataProtection.Decrypt(data);
+            //return Ok(result);
         }
 
     }

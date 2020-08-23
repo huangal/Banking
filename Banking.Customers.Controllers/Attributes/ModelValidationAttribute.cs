@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json;
+using Banking.Customers.Domain.Interfaces;
 using Banking.Customers.Domain.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +11,36 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Banking.Customers.Controllers.Attributes
 {
+    public class RequestValidationAttribute : ValidationAttribute
+    {
+
+
+
+        protected override ValidationResult IsValid( object value, ValidationContext validationContext)
+        {
+            if (value == null)
+                return new ValidationResult("Invalid Data");
+            return ValidationResult.Success; 
+
+        //    string email = value as string;
+        //    if (email == null)
+        //        return new ValidationResult(Errors.General.ValueIsInvalid().Serialize());
+
+        //    Result<Email> emailResult = Email.Create(email); 
+
+        //if (emailResult.IsFailure)
+        //        return new ValidationResult(emailResult.Error.Serialize()); 
+
+        //return ValidationResult.Success;
+        }
+
+
+    }
+
 
     public class ModelValidationAttribute : ActionFilterAttribute
     {
+
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)

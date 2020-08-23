@@ -8,7 +8,7 @@ namespace BBanking.Customers.Controllers.Policies
     {
         internal bool HasPartnerAccess(IHttpContextAccessor httpContextAccessor)
         {
-            string clientName = httpContextAccessor.HttpContext.Request.Headers[ApplicationHelper.ClientHeader];
+            string clientName = httpContextAccessor.HttpContext.Request.Headers[HeatherType.ClientHeader];
             return !string.IsNullOrEmpty(clientName);
         }
     }

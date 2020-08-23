@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Banking.Customers.Domain.Models
 {
@@ -20,16 +19,6 @@ namespace Banking.Customers.Domain.Models
 
         [Required(ErrorMessage = "Required")]
         public Department? Department { get; set; }
-    }
-
-
-    public class Transaction
-    {
-        public Guid? TransactionId { get; set; }
-        public bool IsValidGuid()
-        {
-            return (Guid.TryParse(TransactionId.ToString(), out var guid) && guid != Guid.Empty);
-        }
     }
 
 
